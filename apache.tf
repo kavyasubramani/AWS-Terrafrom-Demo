@@ -4,11 +4,9 @@ provider "aws" {
 
   secret_key = "${var.aws_secret_key}"
 
-  region     = "us-west-2"
-
+  region     = "eu-west-1"
 }
 
- 
 
 variable "aws_access_key" {
 
@@ -48,8 +46,6 @@ resource "aws_subnet" "PublicSubnet" {
 
   cidr_block = "10.0.1.0/24"
 
- 
-
   tags {
 
     Name = "PublicSubnet"
@@ -84,14 +80,9 @@ resource "aws_route_table" "PublicRouteTable" {
 
   vpc_id = "${aws_vpc.Apache_VPC.id}"
 
- 
-
   tags {
-
     Name = "PublicRouteTable"
-
   }
-
 }
 
 resource "aws_route" "PublicRoute" {
@@ -156,8 +147,6 @@ resource "aws_security_group" "WebServerSecurityGroup" {
 
   }
 
- 
-
   tags {
 
     Name = "WebServerSecurityGroup"
@@ -196,7 +185,7 @@ resource "aws_instance" "WebServerInstance" {
 
                 sudo /etc/init.d/httpd start
 
-                echo \"<html><body><h1>Antony - It's your first Terraform!!!</h1>\" > /var/www/html/index.html
+                echo \"<html><body><h1> AWS Terraform Demo - It's your first Terraform Demo , Well done Praveen!!!</h1>\" > /var/www/html/index.html
 
                 echo \"</body></html>\" >> /var/www/html/index.html"
 
