@@ -1,0 +1,12 @@
+
+Step1: download the terraform windows package - https://www.terraform.io/downloads.html
+
+Step2: Unzip into 
+
+Access Key
+============================================
+AKIAI73VHOZO5VM7ZCRA
+
+Secret Key
+============================================
+RUqskujkqY8EkzcgXwLPXxzUgoG3wMcG5w7jJ1MF
