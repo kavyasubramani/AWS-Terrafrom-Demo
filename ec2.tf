@@ -4,19 +4,21 @@ provider "aws" {
 
   secret_key = "${var.aws_secret_key}"
 
-  region     = "us-east-2"
+  region     = "us-west-2"
+
 }
 
+ 
 
 variable "aws_access_key" {
 
-    default = "AKIA32YEF3W5IZC5TJGQ"
+    default = "AKIATFTJDVLEASYSZEWL"
 
 }
 
 variable "aws_secret_key" {
 
-    default = "lE6k3iVyDvvPUp4naIaqIyYpuiFgkc1jvXwYyA3Q"
+    default = "q+zuGxAw59u37EPU0QZMcglaQ8h1SdcBTVrBEvt/"
 
 }
 
@@ -44,7 +46,13 @@ resource "aws_subnet" "PublicSubnet" {
 
   vpc_id     = "${aws_vpc.Apache_VPC.id}"
 
+  availability_zone = "us-west-2a"
+  
+  depends_on = ["aws_vpc.Apache_VPC"]
+
   cidr_block = "10.0.1.0/24"
+
+ 
 
   tags {
 
@@ -57,32 +65,30 @@ resource "aws_subnet" "PublicSubnet" {
 resource "aws_internet_gateway" "InternetGateway" {
 
   vpc_id = "${aws_vpc.Apache_VPC.id}"
-
- 
+  
+  depends_on = ["aws_subnet.PublicSubnet"]
 
   tags {
 
     Name = "InternetGateway"
 
-  }
+ }
 
 }
 
-resource "aws_vpn_gateway_attachment" "VPCGatewayAttachment" {
-
-  vpc_id = "${aws_vpc.Apache_VPC.id}"
-
-  vpn_gateway_id = "${aws_internet_gateway.InternetGateway.id}"
-
-}
 
 resource "aws_route_table" "PublicRouteTable" {
 
   vpc_id = "${aws_vpc.Apache_VPC.id}"
 
+  depends_on = ["aws_subnet.PublicSubnet"]
+
   tags {
+
     Name = "PublicRouteTable"
+
   }
+
 }
 
 resource "aws_route" "PublicRoute" {
@@ -90,6 +96,8 @@ resource "aws_route" "PublicRoute" {
   route_table_id = "${aws_route_table.PublicRouteTable.id}"
 
   destination_cidr_block = "0.0.0.0/0"
+  
+  depends_on = ["aws_route_table.PublicRouteTable"]
 
   gateway_id = "${aws_internet_gateway.InternetGateway.id}"
 
@@ -98,6 +106,8 @@ resource "aws_route" "PublicRoute" {
 resource "aws_route_table_association" "PublicSubnetRouteTableAssociation" {
 
   subnet_id      = "${aws_subnet.PublicSubnet.id}"
+  
+  depends_on = ["aws_route_table.PublicRouteTable"]
 
   route_table_id = "${aws_route_table.PublicRouteTable.id}"
 
@@ -120,6 +130,8 @@ resource "aws_security_group" "WebServerSecurityGroup" {
   description = "Enable HTTP ingress"
 
   vpc_id = "${aws_vpc.Apache_VPC.id}"
+  
+  depends_on = ["aws_vpc.Apache_VPC"]
 
  
 
@@ -147,6 +159,8 @@ resource "aws_security_group" "WebServerSecurityGroup" {
 
   }
 
+ 
+
   tags {
 
     Name = "WebServerSecurityGroup"
@@ -155,29 +169,22 @@ resource "aws_security_group" "WebServerSecurityGroup" {
 
 }
 
- 
-
 resource "aws_instance" "WebServerInstance" {
 
   ami           = "ami-a0cfeed8"
 
-  instance_type = "t2.micro"
+  instance_type = "t2.medium"
 
-  #vpc_security_group_ids = "${aws_security_group.WebServerSecurityGroup}"
+  security_groups = ["${aws_security_group.WebServerSecurityGroup.id}"]
 
-  associate_public_ip_address = "true"
-
-  subnet_id = "${aws_security_group.WebServerSecurityGroup.id}"
-
-  key_name = "AWSHome"       
+  subnet_id = "${aws_subnet.PublicSubnet.id}"     
 
   tags {
-
-    Name = "WebServerInstance"
-
+    Name = "WebServer"
+    Environment = "Production"
   }
-
-  user_data = <<HEREDOC
+  
+    user_data = <<HEREDOC
 
                 sudo yum update -y
 
@@ -185,10 +192,11 @@ resource "aws_instance" "WebServerInstance" {
 
                 sudo /etc/init.d/httpd start
 
-                echo \"<html><body><h1> AWS Terraform Demo - It's your first Terraform Demo , Well done Praveen!!!</h1>\" > /var/www/html/index.html
+                echo \"<html><body><h1> First DevOps Demo in AWS using Terraform - Well Done !!!</h1>\" > /var/www/html/index.html
 
                 echo \"</body></html>\" >> /var/www/html/index.html"
 
                 HEREDOC
+  
+} 
 
-}
