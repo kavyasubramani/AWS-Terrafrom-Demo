@@ -10,13 +10,13 @@ provider "aws" {
 
 variable "aws_access_key" {
 
-    default = "AKIAI73VHOZO5VM7ZCRA"
+    default = "AKIA32YEF3W5LBV4YXVJ"
 
 }
 
 variable "aws_secret_key" {
 
-    default = "RUqskujkqY8EkzcgXwLPXxzUgoG3wMcG5w7jJ1MF"
+    default = "endpLQvtSQeSZkIWK66HIA469ZoLttrAoa4vufS5"
 
 }
 
