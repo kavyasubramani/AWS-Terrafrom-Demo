@@ -177,6 +177,8 @@ resource "aws_instance" "WebServerInstance" {
 
   security_groups = ["${aws_security_group.WebServerSecurityGroup.id}"]
 
+  associate_public_ip_address = "true"
+
   subnet_id = "${aws_subnet.PublicSubnet.id}"     
 
   tags {
