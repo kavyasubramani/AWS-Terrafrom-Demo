@@ -187,9 +187,9 @@ resource "aws_instance" "WebServerInstance" {
 		#! /bin/bash
         sudo yum update -y
         sudo yum install httpd -y
+		echo "<h1>First DevOps Demo in AWS using Terraform - Well Done ..!!</h1>" | sudo tee /var/www/html/index.html
 		sudo service httpd start
 		sudo chkconfig httpd on
-		echo "<h1>First DevOps Demo in AWS using Terraform - Well Done ..!!</h1>" | sudo tee /var/www/html/index.html
 	    HEREDOC
 
   tags {
