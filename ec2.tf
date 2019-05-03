@@ -190,7 +190,8 @@ resource "aws_instance" "WebServerInstance" {
     user_data = <<HEREDOC
                 sudo yum update -y
                 sudo yum install httpd -y
-                echo \"<html><body><h1> First DevOps Demo in AWS using Terraform - Well Done !!!</h1> </body></html> \" > /var/www/html/index.html		
+                echo "<html><body><h1> First DevOps Demo in AWS using Terraform - Well Done !!!</h1> </body></html>" > /var/www/html/index.html	
+                nohup busybox httpd -f -p 8080 &				
 				sudo service httpd start
 				sudo chkconfig httpd on
                 HEREDOC
