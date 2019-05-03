@@ -173,7 +173,7 @@ resource "aws_instance" "WebServerInstance" {
 
   ami           = "ami-a0cfeed8"
 
-  instance_type = "t2.medium"
+  instance_type = "t2.micro"
 
   security_groups = ["${aws_security_group.WebServerSecurityGroup.id}"]
 
@@ -187,14 +187,14 @@ resource "aws_instance" "WebServerInstance" {
     Name = "WebServer"
   }
   
-    user_data = <<HEREDOC
+    user_data = <<-EOF
                 sudo yum update -y
                 sudo yum install httpd -y
                 echo "<html><body><h1> First DevOps Demo in AWS using Terraform - Well Done !!!</h1> </body></html>" > /var/www/html/index.html	
                 nohup busybox httpd -f -p 8080 &				
 				sudo service httpd start
 				sudo chkconfig httpd on
-                HEREDOC
+                EOF
   
 } 
 
