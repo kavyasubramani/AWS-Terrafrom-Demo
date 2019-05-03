@@ -181,6 +181,8 @@ resource "aws_instance" "WebServerInstance" {
 
   subnet_id = "${aws_subnet.PublicSubnet.id}"     
 
+  key_name = "demo" 
+
   tags {
     Name = "WebServer"
   }
