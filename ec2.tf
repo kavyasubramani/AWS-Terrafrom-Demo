@@ -183,18 +183,17 @@ resource "aws_instance" "WebServerInstance" {
 
   key_name = "demo" 
   
-  user_data = << EOF
+  user_data = <<HEREDOC
 		#! /bin/bash
         sudo yum update -y
         sudo yum install httpd -y
 		sudo service httpd start
 		sudo chkconfig httpd on
-		echo "<h1>First DevOps Demo in AWS using Terraform - Well Done</h1>" | sudo tee /var/www/html/index.html
-	EOF
+		echo "<h1>First DevOps Demo in AWS using Terraform - Well Done ..!!</h1>" | sudo tee /var/www/html/index.html
+	    HEREDOC
 
   tags {
     Name = "WebServer"
   }
   
 } 
-
